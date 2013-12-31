@@ -77,6 +77,7 @@ describe "AuthenticationPages" do
           it {should have_selector('title', text: 'Sign in')}
         end
       end
+      # end in the Users controller
 
       describe "when attempting to visit a protected page" do
         before do
@@ -108,9 +109,26 @@ describe "AuthenticationPages" do
           end
 
         end
+        # end after signing in
       end
+      # end when attempting to visit a protected page
+
+      describe "in the Microposts controller" do
+
+        describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete micropost_path(FactoryGirl.create(:micropost)) }
+          specify { response.should redirect_to(signin_path) }
+        end
+      end
+      # end in the Microposts controller
 
     end
+    # end for non-signed-in users
 
     describe "as wrong user" do
       let(:user) {FactoryGirl.create(:user)}
@@ -128,9 +146,12 @@ describe "AuthenticationPages" do
         specify { response.should redirect_to(root_path) }
       end
     end
+    # end as wrong user
 
 
 
   end
+  # end authorization
 
 end
+# end AuthenticationPages
